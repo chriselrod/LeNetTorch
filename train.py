@@ -7,7 +7,7 @@ import os
 path = os.path.dirname(os.path.realpath(__file__))
 USE_CUDA = torch.cuda.is_available()
 device = torch.device("cuda" if USE_CUDA else "cpu")
-BATCH_SIZE = USE_CUDA ? 8*len(os.sched_getaffinity(0)) : 2048
+BATCH_SIZE = USE_CUDA ? 16*len(os.sched_getaffinity(0)) : 2048
 
 class LeNet(torch.nn.Module):
     def __init__(self):
