@@ -5,6 +5,10 @@ import time
 import os
 
 path = os.path.dirname(os.path.realpath(__file__))
+USE_CUDA = torch.cuda.is_available()
+device = torch.device("cuda" if USE_CUDA else "cpu")
+NUM_THREADS = len(os.sched_getaffinity(0))
+BATCH_SIZE = USE_CUDA ? 16*NUM_THREADS : 2048
 
 class LeNet(torch.nn.Module):
     def __init__(self):
@@ -46,27 +50,27 @@ def report_error(model, data):
     correct = 0
     count = 0
     for (x, y) in data:
-        correct += sum(torch.argmax(model(x),dim=1) == y)
+        correct += sum(torch.argmax(model(x.to(device)),dim=1) == y.to(device))
         count += len(y)
     print('Accuracy: {:.4f}'.format(correct / count))
     
     
 def train():
     epochs = 10
-    num_threads = len(os.sched_getaffinity(0))//2
-    batch_size = 32*num_threads
     train = torchvision.datasets.MNIST(path, train = True, download = True,
         transform = torchvision.transforms.ToTensor())
+    train.data.to(device)
+    train.targets.to(device)
     train_loader = torch.utils.data.DataLoader(
-        train, batch_size = batch_size, shuffle = True,
-        num_workers = num_threads, pin_memory = True)
+        train, batch_size = BATCH_SIZE, shuffle = True,
+        num_workers = NUM_THREADS//2, pin_memory = True)
     test = torchvision.datasets.MNIST(path, train = False, download = True,
         transform = torchvision.transforms.ToTensor())
     test_loader = torch.utils.data.DataLoader(
-        test, batch_size = batch_size, shuffle = True,
-        num_workers = num_threads, pin_memory = True)
+        test, batch_size = BATCH_SIZE, shuffle = True,
+        num_workers = NUM_THREADS//2, pin_memory = True)
 
-    model = LeNet()
+    model = LeNet().to(device)
     adam = torch.optim.Adam(model.parameters(), lr = 3e-4)
 
     loss_fn = torch.nn.CrossEntropyLoss()
@@ -74,7 +78,7 @@ def train():
     for _ in range(epochs):
         for (x, y) in train_loader:
             adam.zero_grad()
-            loss_fn(model(x), y).backward()
+            loss_fn(model(x.to(device)), y.to(device)).backward()
             adam.step()
     print('Took: {:.2f}'.format(time.time() - t_start))
     report_error(model, test_loader)
