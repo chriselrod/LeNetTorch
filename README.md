@@ -10,4 +10,8 @@ On an AMD EPYC 7513 32-Core Processor:
 Took: 14.26
 Accuracy: 0.9681
 ```
-
+On an RTX 2060
+```
+Took: 9.05
+Accuracy: 0.9728
+```
