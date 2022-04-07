@@ -53,8 +53,8 @@ def report_error(model, data):
     
 def train():
     epochs = 10
-    num_threads = len(os.sched_getaffinity(0))
-    batch_size = 16*num_threads
+    num_threads = len(os.sched_getaffinity(0))//2
+    batch_size = 32*num_threads
     train = torchvision.datasets.MNIST(path, train = True, download = True,
         transform = torchvision.transforms.ToTensor())
     train_loader = torch.utils.data.DataLoader(

@@ -2,12 +2,12 @@
 
 On an Intel i9-7980XE 18-Core Processor:
 ```
-Took: 15.48
-Accuracy: 0.9780
+Took: 11.85
+Accuracy: 0.9774
 ```
 On an AMD EPYC 7513 32-Core Processor:
 ```
-Took: 17.03
-Accuracy: 0.9627
+Took: 14.26
+Accuracy: 0.9681
 ```
 
