@@ -4,20 +4,7 @@ import torchvision
 import time
 import os
 
-path = os.path.dirname(os.path.realpath(__file__)) + '/MNIST/'
-# def download_data(f):
-#     from urllib.request import urlopen
-#     import gzip
-#     with urlopen('http://yann.lecun.com/exdb/mnist/' + f + '.gz') as ugz, open(path + f, 'wb+') as dest:
-#         for line in ugz:
-#             dest.write(line)
-
-# if not os.path.exists(path):
-#     os.mkdir(path)
-# for f in ['train-images-idx3-ubyte', 'train-labels-idx1-ubyte',
-#           't10k-images-idx3-ubyte', 't10k-labels-idx1-ubyte']:
-#     if not os.path.exists(path + f):
-#         download_data(f)
+path = os.path.dirname(os.path.realpath(__file__))
 
 class LeNet(torch.nn.Module):
     def __init__(self):
