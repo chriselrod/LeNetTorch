@@ -2,13 +2,19 @@
 
 On an Intel i9-7980XE 18-Core Processor:
 ```
-Took: 11.85
-Accuracy: 0.9774
+Use cuda: False
+Took: 12.48
+Accuracy: 0.9808
 ```
 On an AMD EPYC 7513 32-Core Processor:
 ```
-Took: 14.26
-Accuracy: 0.9681
+Took: 13.99
+Accuracy: 0.9744
+```
+On a V100 GPU paired with the Epyc 7513:
+```
+Took: 18.83
+Accuracy: 0.9524
 ```
 On an RTX 2060
 ```
