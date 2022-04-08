@@ -16,3 +16,8 @@ On a V100 GPU paired with the Epyc 7513:
 Took: 18.83
 Accuracy: 0.9524
 ```
+On an RTX 2060
+```
+Took: 9.05
+Accuracy: 0.9728
+```
