@@ -83,6 +83,14 @@ def train():
             adam.step()
     print('Took: {:.2f}'.format(time.time() - t_start))
     report_error(model, test_loader)
+    t_start = time.time()
+    for _ in range(epochs):
+        for (x, y) in train_loader:
+            adam.zero_grad()
+            loss_fn(model(x.to(device)), y.to(device)).backward()
+            adam.step()
+    print('Took: {:.2f}'.format(time.time() - t_start))
+    report_error(model, test_loader)
     
 if __name__ == '__main__':
     train()
