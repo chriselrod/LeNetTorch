@@ -7,7 +7,7 @@ import os
 path = os.path.dirname(os.path.realpath(__file__))
 USE_CUDA = torch.cuda.is_available()
 print('Use cuda:', USE_CUDA)
-device = torch.device("cuda" if USE_CUDA else "cpu")
+device = torch.device("cuda:2" if USE_CUDA else "cpu")
 NUM_THREADS = len(os.sched_getaffinity(0))
 BATCH_SIZE = 2048 if USE_CUDA else 16*NUM_THREADS
 
@@ -75,22 +75,15 @@ def train():
     adam = torch.optim.Adam(model.parameters(), lr = 3e-4)
 
     loss_fn = torch.nn.CrossEntropyLoss()
-    t_start = time.time()
-    for _ in range(epochs):
-        for (x, y) in train_loader:
-            adam.zero_grad()
-            loss_fn(model(x.to(device)), y.to(device)).backward()
-            adam.step()
-    print('Took: {:.2f}'.format(time.time() - t_start))
-    report_error(model, test_loader)
-    t_start = time.time()
-    for _ in range(epochs):
-        for (x, y) in train_loader:
-            adam.zero_grad()
-            loss_fn(model(x.to(device)), y.to(device)).backward()
-            adam.step()
-    print('Took: {:.2f}'.format(time.time() - t_start))
-    report_error(model, test_loader)
+    for _ in range(2):
+        t_start = time.time()
+        for _ in range(epochs):
+            for (x, y) in train_loader:
+                adam.zero_grad()
+                loss_fn(model(x.to(device)), y.to(device)).backward()
+                adam.step()
+        print('Took: {:.2f}'.format(time.time() - t_start))
+        report_error(model, test_loader)
     
 if __name__ == '__main__':
     train()
